@@ -37,7 +37,13 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
       '@/assets': path.resolve(__dirname, '..', 'assets'),
     },
     framework: 'solid',
-    compiler: 'webpack5',
+    compiler: {
+      type: 'webpack5',
+      prebundle: {
+        enable: false,
+        force: true,
+      },
+    },
     cache: {
       enable: false // Webpack 持久化缓存配置，建议开启。默认配置请参考：https://docs.taro.zone/docs/config-detail#cache
     },
@@ -61,12 +67,27 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
       webpackChain(chain) {
         chain.resolve.plugin('tsconfig-paths').use(TsconfigPathsPlugin)
         chain.plugin('compression-webpack-plugin').use(CompressionPlugin, [{
-          // include: "../flapp/build/web/assets",
           filename: "[path][base].br",
           algorithm: "brotliCompress",
-          test: /\.(wasm|ttf|otf)$/,
+          test: /\.(wasm|ttf|otf|woff2)$/,
           deleteOriginalAssets: true,
         }])
+        chain.module
+          .rule('imports')
+          .test(/canvaskit\.js$/)
+          .use('import')
+          .loader('imports-loader')
+          .options({
+            // this works only when import dynamically
+            imports: [
+              "named @/src/poly WebAssembly",
+              "named @/src/poly fetch",
+              // "named @/src/poly URL",
+            ],
+            additionalCode: `
+                const URL = globalThis.URL;
+              `
+          });
         chain.merge({
           performance: {
             maxEntrypointSize: 2048000,

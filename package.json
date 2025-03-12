@@ -64,6 +64,7 @@
     "compression-webpack-plugin": "^11.1.0",
     "eslint": "^8.57.0",
     "eslint-config-taro": "4.0.9",
+    "imports-loader": "^5.0.0",
     "postcss": "^8.4.38",
     "sass": "^1.75.0",
     "stylelint": "^16.4.0",

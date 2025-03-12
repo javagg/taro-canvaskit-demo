@@ -1,14 +1,8 @@
-import CanvasKitInit from '@/assets/canvaskit-nofont/canvaskit'
-import { window } from '@tarojs/runtime'
 export async function ckload() {
-  // let m = await import('!@/assets/canvaskit-nofont/canvaskit')
-  let wasm_dir =  "/assets/canvaskit-nofont"
-
-  // const CanvasKitInit = m.default
-  // const kit = await CanvasKitInit({ locateFile: (file) => `${wasm_dir}/${file}` })
-  // const kit = await CanvasKitInit() // used when canvaskit shipped with flutter, good for h5
-   const kit = CanvasKitInit() // used when canvaskit shipped with flutter, good for h5
-
+  let m = await import('@/assets/canvaskit-nofont/canvaskit')
+  const CanvasKitInit = m.default
+  const kit = CanvasKitInit() // used when canvaskit shipped with flutter, good for h5
+  console.log(kit)
   // if (process.env.TARO_ENV !== 'h5') {
   //   const oldGetWebGLContext = kit.GetWebGLContext
   //   kit.GetWebGLContext = function (canvas, attrs) {
